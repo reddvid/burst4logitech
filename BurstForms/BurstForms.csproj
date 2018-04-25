@@ -7,7 +7,7 @@
     <ProjectGuid>{632636EE-B901-417B-AC9C-244BD0B11C96}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>BurstForms</RootNamespace>
-    <AssemblyName>BurstForms</AssemblyName>
+    <AssemblyName>Logitech Rippler</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -35,7 +35,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>logiExporter.ico</ApplicationIcon>
+    <ApplicationIcon>logi_ripple_Ajf_icon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -75,13 +75,10 @@
       <HintPath>..\..\..\..\Downloads\Ven\WhoIsSpeaking\ICCReader.dll</HintPath>
     </Reference>
     <Reference Include="Ini.Net, Version=1.0.5531.18665, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\BurstForLogitech\packages\ini.net.1.1.0\lib\net20\Ini.Net.dll</HintPath>
+      <HintPath>..\packages\ini.net.1.1.0\lib\net20\Ini.Net.dll</HintPath>
     </Reference>
     <Reference Include="InputBox, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\BurstForLogitech\packages\Essy.Tools.InputBox.1.0.0\lib\net20\InputBox.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenHardwareMonitorLib">
-      <HintPath>..\..\..\..\Downloads\Ven\WhoIsSpeaking\OpenHardwareMonitorLib.dll</HintPath>
+      <HintPath>..\packages\Essy.Tools.InputBox.1.0.0\lib\net20\InputBox.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -150,6 +147,7 @@
     <Content Include="LogitechLedEnginesWrapper.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="logi_ripple_Ajf_icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ColorJizz.dll">

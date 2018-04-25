@@ -57,6 +57,7 @@
             this.lstProfiles = new System.Windows.Forms.ListBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.chkBreathing = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pboxColor2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numAoE)).BeginInit();
@@ -84,7 +85,6 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.btnSaveProfile);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.pboxColor2);
             this.groupBox1.Controls.Add(this.label6);
@@ -104,13 +104,13 @@
             this.groupBox1.Size = new System.Drawing.Size(312, 137);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Ripple Settings";
+            this.groupBox1.Text = "Ripple Settings (for RGB per-key keyboards)";
             // 
             // btnSaveProfile
             // 
-            this.btnSaveProfile.Location = new System.Drawing.Point(186, 100);
+            this.btnSaveProfile.Location = new System.Drawing.Point(330, 12);
             this.btnSaveProfile.Name = "btnSaveProfile";
-            this.btnSaveProfile.Size = new System.Drawing.Size(120, 23);
+            this.btnSaveProfile.Size = new System.Drawing.Size(169, 23);
             this.btnSaveProfile.TabIndex = 14;
             this.btnSaveProfile.Text = "Save profile";
             this.btnSaveProfile.UseVisualStyleBackColor = true;
@@ -301,6 +301,7 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.chkBreathing);
             this.groupBox3.Controls.Add(this.label9);
             this.groupBox3.Controls.Add(this.label10);
             this.groupBox3.Controls.Add(this.numRippleInterval);
@@ -310,7 +311,7 @@
             this.groupBox3.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox3.Location = new System.Drawing.Point(13, 201);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(311, 77);
+            this.groupBox3.Size = new System.Drawing.Size(311, 87);
             this.groupBox3.TabIndex = 4;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "KeySaver Settings";
@@ -427,7 +428,7 @@
             this.lstProfiles.FormattingEnabled = true;
             this.lstProfiles.Location = new System.Drawing.Point(6, 21);
             this.lstProfiles.Name = "lstProfiles";
-            this.lstProfiles.Size = new System.Drawing.Size(157, 234);
+            this.lstProfiles.Size = new System.Drawing.Size(157, 221);
             this.lstProfiles.TabIndex = 2;
             this.lstProfiles.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lstProfiles_MouseDoubleClick);
             // 
@@ -435,9 +436,9 @@
             // 
             this.groupBox2.Controls.Add(this.lstProfiles);
             this.groupBox2.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox2.Location = new System.Drawing.Point(330, 12);
+            this.groupBox2.Location = new System.Drawing.Point(330, 41);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(169, 266);
+            this.groupBox2.Size = new System.Drawing.Size(169, 247);
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Profiles List";
@@ -445,15 +446,28 @@
             // notifyIcon1
             // 
             this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
-            this.notifyIcon1.Text = "notifyIcon1";
+            this.notifyIcon1.Text = "Burst for Logitech";
             this.notifyIcon1.Visible = true;
             this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
+            // 
+            // chkBreathing
+            // 
+            this.chkBreathing.AutoSize = true;
+            this.chkBreathing.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkBreathing.Location = new System.Drawing.Point(9, 67);
+            this.chkBreathing.Name = "chkBreathing";
+            this.chkBreathing.Size = new System.Drawing.Size(109, 17);
+            this.chkBreathing.TabIndex = 6;
+            this.chkBreathing.Text = "Breathing effect";
+            this.chkBreathing.UseVisualStyleBackColor = true;
+            this.chkBreathing.CheckedChanged += new System.EventHandler(this.chkBreathing_CheckedChanged);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(511, 290);
+            this.ClientSize = new System.Drawing.Size(511, 300);
+            this.Controls.Add(this.btnSaveProfile);
             this.Controls.Add(this.chkUseKeySaver);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
@@ -463,7 +477,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "Form1";
-            this.Text = "Logitech Rippler";
+            this.Text = "Burst for Logitech";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Resize += new System.EventHandler(this.Form1_Resize);
             this.groupBox1.ResumeLayout(false);
@@ -513,6 +527,7 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private System.Windows.Forms.Button btnSaveProfile;
+        private System.Windows.Forms.CheckBox chkBreathing;
     }
 }
 

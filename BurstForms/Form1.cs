@@ -71,6 +71,8 @@ namespace BurstForms
 
         private void LoadSettings(string p)
         {
+            groupBox2.Text = "Profiles (Active: " + p + ")";
+
             if (!File.Exists(Application.StartupPath + "\\Profiles\\" + p + ".prf"))
             {
                 MessageBox.Show("Invalid profile file specified, reverting to defaults");
@@ -95,7 +97,9 @@ namespace BurstForms
             m_WaveSpeed = pFile.ReadDouble("Animation", "WaveFalloff");
             useKeysaver = pFile.ReadBoolean("LED", "UseKeysaver");
             keySaverTime = pFile.ReadInteger("LED", "KeySaverTime");
+            keysaveBreathe = pFile.ReadBoolean("LED", "KeySaveBreathe");
 
+            chkBreathing.Checked = keysaveBreathe;
             chkRandomColor.Checked = randomColours;
             chkUseKeySaver.Checked = useKeysaver;
             numWaitTime.Value = keySaverTime;
@@ -260,6 +264,11 @@ namespace BurstForms
             pFile.WriteBoolean("Animation", "Wave", m_Wave);
             pFile.WriteDouble("Animation", "WaveFalloff", m_WaveSpeed);
             pFile.WriteDouble("KeySave", "NewRippleInterval", m_KeysaveNewRippleInterval);
+        }
+
+        private void chkBreathing_CheckedChanged(object sender, EventArgs e)
+        {
+            keysaveBreathe = chkBreathing.Checked;
         }
     }
 }
