@@ -145,6 +145,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Images\kb.gif" />
+    <Content Include="Images\logiburst.png" />
     <Content Include="keymap.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
