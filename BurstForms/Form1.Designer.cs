@@ -32,7 +32,9 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.chkUseLgsProfile = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.btnSaveProfile = new System.Windows.Forms.Button();
+            this.chkWave = new System.Windows.Forms.CheckBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.numWaveSpd = new System.Windows.Forms.NumericUpDown();
             this.label4 = new System.Windows.Forms.Label();
             this.pboxColor2 = new System.Windows.Forms.PictureBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -46,7 +48,9 @@
             this.numGradSpd = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.numAnimDelay = new System.Windows.Forms.NumericUpDown();
+            this.btnSaveProfile = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.chkBreathing = new System.Windows.Forms.CheckBox();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.numRippleInterval = new System.Windows.Forms.NumericUpDown();
@@ -57,8 +61,9 @@
             this.lstProfiles = new System.Windows.Forms.ListBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.chkBreathing = new System.Windows.Forms.CheckBox();
+            this.chkAnimateLED = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numWaveSpd)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pboxColor2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numAoE)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numFadeSpd)).BeginInit();
@@ -75,7 +80,7 @@
             // 
             this.chkUseLgsProfile.AutoSize = true;
             this.chkUseLgsProfile.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkUseLgsProfile.Location = new System.Drawing.Point(12, 12);
+            this.chkUseLgsProfile.Location = new System.Drawing.Point(93, 12);
             this.chkUseLgsProfile.Name = "chkUseLgsProfile";
             this.chkUseLgsProfile.Size = new System.Drawing.Size(184, 17);
             this.chkUseLgsProfile.TabIndex = 0;
@@ -85,6 +90,9 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.chkWave);
+            this.groupBox1.Controls.Add(this.label11);
+            this.groupBox1.Controls.Add(this.numWaveSpd);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.pboxColor2);
             this.groupBox1.Controls.Add(this.label6);
@@ -106,20 +114,60 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Ripple Settings (for RGB per-key keyboards)";
             // 
-            // btnSaveProfile
+            // chkWave
             // 
-            this.btnSaveProfile.Location = new System.Drawing.Point(330, 12);
-            this.btnSaveProfile.Name = "btnSaveProfile";
-            this.btnSaveProfile.Size = new System.Drawing.Size(169, 23);
-            this.btnSaveProfile.TabIndex = 14;
-            this.btnSaveProfile.Text = "Save profile";
-            this.btnSaveProfile.UseVisualStyleBackColor = true;
-            this.btnSaveProfile.Click += new System.EventHandler(this.btnSaveProfile_Click);
+            this.chkWave.AutoSize = true;
+            this.chkWave.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkWave.Location = new System.Drawing.Point(175, 22);
+            this.chkWave.Name = "chkWave";
+            this.chkWave.Size = new System.Drawing.Size(92, 17);
+            this.chkWave.TabIndex = 20;
+            this.chkWave.Text = "Enable Wave";
+            this.chkWave.UseVisualStyleBackColor = true;
+            this.chkWave.CheckedChanged += new System.EventHandler(this.chkWave_CheckedChanged);
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(172, 44);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(73, 13);
+            this.label11.TabIndex = 15;
+            this.label11.Text = "Wave Speed:";
+            // 
+            // numWaveSpd
+            // 
+            this.numWaveSpd.DecimalPlaces = 1;
+            this.numWaveSpd.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.numWaveSpd.Location = new System.Drawing.Point(251, 42);
+            this.numWaveSpd.Maximum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numWaveSpd.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.numWaveSpd.Name = "numWaveSpd";
+            this.numWaveSpd.Size = new System.Drawing.Size(55, 22);
+            this.numWaveSpd.TabIndex = 14;
+            this.numWaveSpd.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numWaveSpd.ValueChanged += new System.EventHandler(this.numWaveSpd_ValueChanged);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(240, 18);
+            this.label4.Location = new System.Drawing.Point(240, 67);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(44, 13);
             this.label4.TabIndex = 13;
@@ -127,9 +175,9 @@
             // 
             // pboxColor2
             // 
-            this.pboxColor2.Location = new System.Drawing.Point(243, 34);
+            this.pboxColor2.Location = new System.Drawing.Point(243, 83);
             this.pboxColor2.Name = "pboxColor2";
-            this.pboxColor2.Size = new System.Drawing.Size(41, 37);
+            this.pboxColor2.Size = new System.Drawing.Size(31, 25);
             this.pboxColor2.TabIndex = 12;
             this.pboxColor2.TabStop = false;
             this.pboxColor2.Click += new System.EventHandler(this.pboxColor2_Click);
@@ -170,6 +218,7 @@
             0,
             0,
             65536});
+            this.numAoE.ValueChanged += new System.EventHandler(this.numAoE_ValueChanged);
             // 
             // label5
             // 
@@ -184,7 +233,7 @@
             // 
             this.numFadeSpd.Location = new System.Drawing.Point(104, 77);
             this.numFadeSpd.Maximum = new decimal(new int[] {
-            10,
+            20,
             0,
             0,
             0});
@@ -201,12 +250,13 @@
             0,
             0,
             0});
+            this.numFadeSpd.ValueChanged += new System.EventHandler(this.numFadeSpd_ValueChanged);
             // 
             // chkRandomColor
             // 
             this.chkRandomColor.AutoSize = true;
             this.chkRandomColor.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkRandomColor.Location = new System.Drawing.Point(186, 77);
+            this.chkRandomColor.Location = new System.Drawing.Point(186, 114);
             this.chkRandomColor.Name = "chkRandomColor";
             this.chkRandomColor.Size = new System.Drawing.Size(98, 17);
             this.chkRandomColor.TabIndex = 5;
@@ -217,7 +267,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(183, 18);
+            this.label3.Location = new System.Drawing.Point(183, 67);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(44, 13);
             this.label3.TabIndex = 5;
@@ -225,9 +275,9 @@
             // 
             // pboxColor1
             // 
-            this.pboxColor1.Location = new System.Drawing.Point(186, 34);
+            this.pboxColor1.Location = new System.Drawing.Point(186, 83);
             this.pboxColor1.Name = "pboxColor1";
-            this.pboxColor1.Size = new System.Drawing.Size(41, 37);
+            this.pboxColor1.Size = new System.Drawing.Size(31, 25);
             this.pboxColor1.TabIndex = 4;
             this.pboxColor1.TabStop = false;
             this.pboxColor1.Click += new System.EventHandler(this.pboxColor1_Click);
@@ -245,7 +295,7 @@
             // 
             this.numGradSpd.Location = new System.Drawing.Point(104, 49);
             this.numGradSpd.Maximum = new decimal(new int[] {
-            10,
+            20,
             0,
             0,
             0});
@@ -262,6 +312,7 @@
             0,
             0,
             0});
+            this.numGradSpd.ValueChanged += new System.EventHandler(this.numGradSpd_ValueChanged);
             // 
             // label1
             // 
@@ -299,6 +350,16 @@
             0,
             0});
             // 
+            // btnSaveProfile
+            // 
+            this.btnSaveProfile.Location = new System.Drawing.Point(330, 265);
+            this.btnSaveProfile.Name = "btnSaveProfile";
+            this.btnSaveProfile.Size = new System.Drawing.Size(224, 23);
+            this.btnSaveProfile.TabIndex = 14;
+            this.btnSaveProfile.Text = "Save profile";
+            this.btnSaveProfile.UseVisualStyleBackColor = true;
+            this.btnSaveProfile.Click += new System.EventHandler(this.btnSaveProfile_Click);
+            // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.chkBreathing);
@@ -315,6 +376,18 @@
             this.groupBox3.TabIndex = 4;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "KeySaver Settings";
+            // 
+            // chkBreathing
+            // 
+            this.chkBreathing.AutoSize = true;
+            this.chkBreathing.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkBreathing.Location = new System.Drawing.Point(9, 67);
+            this.chkBreathing.Name = "chkBreathing";
+            this.chkBreathing.Size = new System.Drawing.Size(109, 17);
+            this.chkBreathing.TabIndex = 6;
+            this.chkBreathing.Text = "Breathing effect";
+            this.chkBreathing.UseVisualStyleBackColor = true;
+            this.chkBreathing.CheckedChanged += new System.EventHandler(this.chkBreathing_CheckedChanged);
             // 
             // label9
             // 
@@ -428,7 +501,7 @@
             this.lstProfiles.FormattingEnabled = true;
             this.lstProfiles.Location = new System.Drawing.Point(6, 21);
             this.lstProfiles.Name = "lstProfiles";
-            this.lstProfiles.Size = new System.Drawing.Size(157, 221);
+            this.lstProfiles.Size = new System.Drawing.Size(212, 221);
             this.lstProfiles.TabIndex = 2;
             this.lstProfiles.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lstProfiles_MouseDoubleClick);
             // 
@@ -436,9 +509,9 @@
             // 
             this.groupBox2.Controls.Add(this.lstProfiles);
             this.groupBox2.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox2.Location = new System.Drawing.Point(330, 41);
+            this.groupBox2.Location = new System.Drawing.Point(330, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(169, 247);
+            this.groupBox2.Size = new System.Drawing.Size(224, 247);
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Profiles List";
@@ -450,23 +523,24 @@
             this.notifyIcon1.Visible = true;
             this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
             // 
-            // chkBreathing
+            // chkAnimateLED
             // 
-            this.chkBreathing.AutoSize = true;
-            this.chkBreathing.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkBreathing.Location = new System.Drawing.Point(9, 67);
-            this.chkBreathing.Name = "chkBreathing";
-            this.chkBreathing.Size = new System.Drawing.Size(109, 17);
-            this.chkBreathing.TabIndex = 6;
-            this.chkBreathing.Text = "Breathing effect";
-            this.chkBreathing.UseVisualStyleBackColor = true;
-            this.chkBreathing.CheckedChanged += new System.EventHandler(this.chkBreathing_CheckedChanged);
+            this.chkAnimateLED.AutoSize = true;
+            this.chkAnimateLED.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkAnimateLED.Location = new System.Drawing.Point(12, 12);
+            this.chkAnimateLED.Name = "chkAnimateLED";
+            this.chkAnimateLED.Size = new System.Drawing.Size(68, 17);
+            this.chkAnimateLED.TabIndex = 15;
+            this.chkAnimateLED.Text = "Animate";
+            this.chkAnimateLED.UseVisualStyleBackColor = true;
+            this.chkAnimateLED.CheckedChanged += new System.EventHandler(this.chkAnimateLED_CheckedChanged);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(511, 300);
+            this.ClientSize = new System.Drawing.Size(560, 300);
+            this.Controls.Add(this.chkAnimateLED);
             this.Controls.Add(this.btnSaveProfile);
             this.Controls.Add(this.chkUseKeySaver);
             this.Controls.Add(this.groupBox3);
@@ -478,10 +552,12 @@
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "Burst for Logitech";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Resize += new System.EventHandler(this.Form1_Resize);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numWaveSpd)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pboxColor2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numAoE)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numFadeSpd)).EndInit();
@@ -515,7 +591,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown numAnimDelay;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.PictureBox pboxColor2;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.NumericUpDown numRippleInterval;
@@ -528,6 +603,11 @@
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private System.Windows.Forms.Button btnSaveProfile;
         private System.Windows.Forms.CheckBox chkBreathing;
+        private System.Windows.Forms.CheckBox chkWave;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.NumericUpDown numWaveSpd;
+        private System.Windows.Forms.PictureBox pboxColor2;
+        private System.Windows.Forms.CheckBox chkAnimateLED;
     }
 }
 

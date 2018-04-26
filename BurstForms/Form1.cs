@@ -21,15 +21,18 @@ namespace BurstForms
     public partial class Form1 : Form
     {
         private KeyboardHook hook = new KeyboardHook();
+        private IntPtr hWnd = IntPtr.Zero;
+        private IntPtr hEdit = IntPtr.Zero;
         private static IntPtr procHandle = IntPtr.Zero;
         internal static Color m_startColour = Color.Green;
         internal static Color m_endColour = Color.Red;
 
         public static string spellText = "";
+        internal static bool useAnimation = true;
         internal static bool useKeysaver = true;
         internal static int keySaverTime = 30;
-        internal static bool useLogitechColours = false;
-        internal static int m_fadespeed = 7;
+        internal static bool useLogitechColours = true;
+        internal static int m_fadespeed = 15;
         internal static int m_gradientspeed = 7;
         internal static bool m_Wave = true;
         internal static int m_AnimationSpeed = 100;
@@ -37,7 +40,7 @@ namespace BurstForms
         internal static double m_distanceFalloff = 1.0;
         internal static double m_KeysaveNewRippleInterval = 1500;
         private static string currentProfile = "default";
-        public static bool randomColours = true;
+        public static bool randomColours = false;
         public static bool StartMinimized;
         public static bool keysaveBreathe = false;
 
@@ -50,6 +53,8 @@ namespace BurstForms
                 this.ShowInTaskbar = false;
                 this.WindowState = FormWindowState.Minimized;
             }
+
+            LoadProfiles();
 
             notifyIcon1.BalloonTipClosed += (sender, e) => { var thisIcon = (NotifyIcon)sender; thisIcon.Visible = false; thisIcon.Dispose(); };
             WindowsPrincipal myPrincipal = new WindowsPrincipal(WindowsIdentity.GetCurrent());
@@ -64,10 +69,32 @@ namespace BurstForms
             LoadSettings(currentProfile);
 
             LogitechGSDK.LogiLedInit();
+            LogitechGSDK.LogiLedSetTargetDevice(LogitechGSDK.LOGI_DEVICETYPE_PERKEY_RGB);
             LogitechGSDK.LogiLedSaveCurrentLighting();
 
             if (!useLogitechColours) LogitechGSDK.LogiLedSetLighting(0, 0, 0);
         }
+        #region added
+
+        public static byte[] getLEDGridFromBitmap(Bitmap bitmap)
+        {
+            try
+            {
+                BitmapData bmpdata = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, bitmap.PixelFormat);
+                int numbytes = bmpdata.Stride * bitmap.Height;
+                byte[] bytedata = new byte[numbytes];
+                IntPtr ptr = bmpdata.Scan0;
+
+                Marshal.Copy(ptr, bytedata, 0, numbytes);
+
+                bitmap.UnlockBits(bmpdata);
+                return bytedata;
+            }
+            catch
+            { return null; }
+
+        }
+        #endregion
 
         private void LoadSettings(string p)
         {
@@ -80,6 +107,7 @@ namespace BurstForms
             }
 
             var pFile = new IniFile(Application.StartupPath + "\\Profiles\\" + p + ".prf");
+            useAnimation = pFile.ReadBoolean("LED", "LEDAnimation");
             useLogitechColours = pFile.ReadBoolean("LED", "KeepLogitechColours");
             m_startColour = ColorTranslator.FromHtml(pFile.ReadString("LED", "StartColour"));
             m_endColour = ColorTranslator.FromHtml(pFile.ReadString("LED", "EndColour"));
@@ -99,6 +127,8 @@ namespace BurstForms
             keySaverTime = pFile.ReadInteger("LED", "KeySaverTime");
             keysaveBreathe = pFile.ReadBoolean("LED", "KeySaveBreathe");
 
+            chkUseLgsProfile.Checked = useLogitechColours;
+            chkAnimateLED.Checked = useAnimation;
             chkBreathing.Checked = keysaveBreathe;
             chkRandomColor.Checked = randomColours;
             chkUseKeySaver.Checked = useKeysaver;
@@ -107,7 +137,10 @@ namespace BurstForms
             pboxColor2.BackColor = m_endColour;
             numFadeSpd.Value = m_fadespeed;
             numGradSpd.Value = m_gradientspeed;
+            chkWave.Checked = m_Wave;
             numAnimDelay.Value = m_AnimationSpeed;
+            numWaveSpd.Value = (decimal)m_WaveSpeed;
+            numAoE.Value = (decimal)m_distanceFalloff;
             numRippleInterval.Value = (decimal)m_KeysaveNewRippleInterval;
         }
 
@@ -178,24 +211,6 @@ namespace BurstForms
             useLogitechColours = chkUseLgsProfile.Checked;
         }
 
-        public static byte[] getLEDGridFromBitmap(Bitmap bitmap)
-        {
-            try
-            {
-                BitmapData bmpdata = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, bitmap.PixelFormat);
-                int numbytes = bmpdata.Stride * bitmap.Height;
-                byte[] bytedata = new byte[numbytes];
-                IntPtr ptr = bmpdata.Scan0;
-
-                Marshal.Copy(ptr, bytedata, 0, numbytes);
-
-                bitmap.UnlockBits(bmpdata);
-                return bytedata;
-            }
-            catch
-            { return null; }
-        }
-
         private void pboxColor1_Click(object sender, EventArgs e)
         {
             ColorDialog c = new ColorDialog();
@@ -227,7 +242,17 @@ namespace BurstForms
             {
                 LoadSettings(lstProfiles.Items[index].ToString());
                 currentProfile = lstProfiles.Items[index].ToString();
+                SaveAsDefault(currentProfile);
             }
+
+            // Lose focus on me
+            groupBox2.Focus();
+        }
+
+        private void SaveAsDefault(string currentProfile)
+        {
+            Properties.Settings.Default.ProfileDefault = currentProfile;
+            Properties.Settings.Default.Save();
         }
 
         private void btnSaveProfile_Click(object sender, EventArgs e)
@@ -250,6 +275,7 @@ namespace BurstForms
         private void writeSettings(string p)
         {
             var pFile = new IniFile(p);
+            pFile.WriteBoolean("LED", "LEDAnimation", useAnimation);
             pFile.WriteBoolean("LED", "KeepLogitechColours", useLogitechColours);
             pFile.WriteString("LED", "StartColour", ColorTranslator.ToHtml(m_startColour));
             pFile.WriteString("LED", "EndColour", ColorTranslator.ToHtml(m_endColour));
@@ -269,6 +295,50 @@ namespace BurstForms
         private void chkBreathing_CheckedChanged(object sender, EventArgs e)
         {
             keysaveBreathe = chkBreathing.Checked;
+        }
+
+        private void numAoE_ValueChanged(object sender, EventArgs e)
+        {
+            m_distanceFalloff = (double)numAoE.Value;
+        }
+
+        private void numWaveSpd_ValueChanged(object sender, EventArgs e)
+        {
+            m_WaveSpeed = (double)numWaveSpd.Value;
+        }
+
+        private void chkWave_CheckedChanged(object sender, EventArgs e)
+        {
+            m_Wave = chkWave.Checked;
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            LogitechGSDK.LogiLedRestoreLighting();
+            notifyIcon1.Visible = false;
+            notifyIcon1.Icon = null;
+            notifyIcon1.Dispose();
+            notifyIcon1 = null;
+        }
+
+        private void chkAnimateLED_CheckedChanged(object sender, EventArgs e)
+        {
+            useAnimation = chkAnimateLED.Checked;
+        }
+
+        private void numGradSpd_ValueChanged(object sender, EventArgs e)
+        {
+            m_gradientspeed = (int)numGradSpd.Value;
+        }
+
+        private void numFadeSpd_ValueChanged(object sender, EventArgs e)
+        {
+            m_fadespeed = (int)numFadeSpd.Value;
+        }
+
+        private void chkGKeys_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

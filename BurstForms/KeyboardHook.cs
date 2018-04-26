@@ -12,7 +12,7 @@ using System.Diagnostics;
 using ColorManagment;
 using System.Drawing.Imaging;
 using LedCSharp;
-using BurstForms;
+using k = LedCSharp.keyboardNames;
 
 namespace BurstForms
 {
@@ -45,10 +45,13 @@ namespace BurstForms
         }
         private static Bitmap bmp;
         private static AddKeyDelegate addkey;
+        private int cR;
+        private int cG;
+        private int cB;
 
         public IntPtr SetHook(LowLevelKeyboardProc proc)
         {
-            timerKeySaver.Tick += timerKeySaver_Tick;
+            timerKeySaver.Tick += timerKeySaver_Tick;   // Tick for KeySaver
             timerKeySaver.Enabled = true;
             if (Application.OpenForms.Count > 0)
             {
@@ -79,7 +82,7 @@ namespace BurstForms
                 if (bw_Keysave != null)
                     bw_Keysave = null;
                 bw_Breathe = new BackgroundWorker();
-                bw_Breathe.DoWork += bw_Breathe_DoWork;
+                bw_Breathe.DoWork += bw_Breathe_DoWork; // Breathing KeySaver
                 bw_Breathe.WorkerSupportsCancellation = true;
             }
             else
@@ -87,7 +90,7 @@ namespace BurstForms
                 if (bw_Breathe != null)
                     bw_Breathe = null;
                 bw_Keysave = new BackgroundWorker();
-                bw_Keysave.DoWork += bw_Keysave_DoWork;
+                bw_Keysave.DoWork += bw_Keysave_DoWork; // Ripple KeySaver
                 bw_Keysave.WorkerSupportsCancellation = true;
             }
 
@@ -105,9 +108,26 @@ namespace BurstForms
             public int counter;
         }
 
+        public k[] exclude = new k[] { k.G_LOGO, k.G_1, k.G_2, k.G_3, k.G_4, k.G_5, k.G_6, k.G_7, k.G_8, k.G_9, k.G_BADGE };
+
         void bw_Keysave_DoWork(object sender, DoWorkEventArgs e)
         {
+            //LogitechGSDK.LogiLedExcludeKeysFromBitmap(exclude, 10);
             LogitechGSDK.LogiLedSetLighting(0, 0, 0);
+            //LogitechGSDK.LogiLedSetLightingForKeyWithKeyName(k.G_LOGO, 0, 0, 0);
+            //LogitechGSDK.LogiLedSetLightingForKeyWithKeyName(k.G_BADGE, 0, 0, 0);
+            //LogitechGSDK.LogiLedSetLightingForKeyWithKeyName(k.G_1, 0, 0, 0);
+            //LogitechGSDK.LogiLedSetLightingForKeyWithKeyName(k.G_2, 0, 0, 0);
+            //LogitechGSDK.LogiLedSetLightingForKeyWithKeyName(k.G_3, 0, 0, 0);
+            //LogitechGSDK.LogiLedSetLightingForKeyWithKeyName(k.G_4, 0, 0, 0);
+            //LogitechGSDK.LogiLedSetLightingForKeyWithKeyName(k.G_5, 0, 0, 0);
+            //LogitechGSDK.LogiLedSetLightingForKeyWithKeyName(k.G_6, 0, 0, 0);
+            //LogitechGSDK.LogiLedSetLightingForKeyWithKeyName(k.G_7, 0, 0, 0);
+            //LogitechGSDK.LogiLedSetLightingForKeyWithKeyName(k.G_8, 0, 0, 0);
+            //LogitechGSDK.LogiLedSetLightingForKeyWithKeyName(k.G_9, 0, 0, 0);
+            // Set G logo and volume color
+            // LogitechGSDK.LogiLedPulseSingleKey(k.G_LOGO, 200, 10, 10, 0, 0, 0, 500, true);
+
             DateTime inittime = DateTime.Now;
             int counter = 0;
             List<keysavePoint> points = new List<keysavePoint> { };
@@ -129,8 +149,11 @@ namespace BurstForms
                     if (Form1.randomColours)
                     {
                         Random rndcol = new Random();
-                        c1 = System.Drawing.Color.FromArgb(rndcol.Next(30, 255), rndcol.Next(30, 255), rndcol.Next(30, 255));
-                        c2 = System.Drawing.Color.FromArgb(rndcol.Next(30, 255), rndcol.Next(30, 255), rndcol.Next(30, 255));
+                        cR = rndcol.Next(30, 255);
+                        cG = rndcol.Next(30, 255);
+                        cB = rndcol.Next(30, 255);
+                        c1 = System.Drawing.Color.FromArgb(cR, cG, cB);
+                        c2 = System.Drawing.Color.FromArgb(cR, cG, cB);
                     }
 
                     //for (int c = 0; c < 2; c++)
@@ -213,8 +236,9 @@ namespace BurstForms
 
                     byte[] b = Form1.getLEDGridFromBitmap(bmp);
                     //((Form1)Application.OpenForms[0]).pic1.Image = bmp;
-                    //bmp.Save(@"C:\temp\heatmap.png");
+                    //bmp.Save(@"C:\temp\heatmap.png");                  
                     LogitechGSDK.LogiLedSetLightingFromBitmap(b);
+
                 }
                 counter++;
                 System.Threading.Thread.Sleep(10);
@@ -307,7 +331,6 @@ namespace BurstForms
         {
             Debug.WriteLine("HookCallback at " + DateTime.Now.Minute.ToString() + ":" + DateTime.Now.Minute.ToString() + ":" + DateTime.Now.Second.ToString() + ":" + DateTime.Now.Millisecond.ToString());
 
-
             if (timerKeySaver.Enabled || (bw_Keysave != null && bw_Keysave.IsBusy)
                 || (bw_Breathe != null && bw_Breathe.IsBusy))//reset timer for keysaver
             {
@@ -321,17 +344,19 @@ namespace BurstForms
                 //    //
                 //}
                 ////timerKeySaver.Start();
-
-                if (Form1.useLogitechColours)
-                    LogitechGSDK.LogiLedRestoreLighting();
-                else
-                    LogitechGSDK.LogiLedSetLighting(0, 0, 0);
+                if (!Form1.useAnimation)
+                {
+                    if (Form1.useLogitechColours)
+                        LogitechGSDK.LogiLedRestoreLighting();
+                    else
+                        LogitechGSDK.LogiLedSetLighting(0, 0, 0);
+                }
             }
-
 
             int vkCode = Marshal.ReadInt32(lParam);
 
-            if (nCode >= 0 && (wParam == (IntPtr)WM_KEYDOWN || wParam == (IntPtr)WM_SYSKEYDOWN))
+            if (nCode >= 0 && (wParam == (IntPtr)WM_KEYDOWN ||
+                wParam == (IntPtr)WM_SYSKEYDOWN))
             {
                 if (!KeysDown.Contains(vkCode))
                 {
@@ -375,7 +400,6 @@ namespace BurstForms
         private static void AddKeyPress(int vkCode)
         {
             Debug.WriteLine("AddKeyPress at " + DateTime.Now.Minute.ToString() + ":" + DateTime.Now.Minute.ToString() + ":" + DateTime.Now.Second.ToString() + ":" + DateTime.Now.Millisecond.ToString());
-
 
             KeysConverter kc = new KeysConverter();
             string keyChar = kc.ConvertToString(vkCode).ToUpper();
@@ -480,7 +504,7 @@ namespace BurstForms
         private static double[,] distances = new double[21, 6];
         private static double[,] times = new double[21, 6];
         private static bool isAnimated = false;
-        
+
         private static void DoAnimation()
         {
             //return;
@@ -580,7 +604,6 @@ namespace BurstForms
                                 allBlack = false;
                         }
                     lockBitmap.UnlockBits();
-
                 }
                 catch { }
                 finally { }
@@ -590,6 +613,20 @@ namespace BurstForms
                 //bmp.Save(@"C:\temp\heatmap.png"); 
                 Debug.WriteLine("set lighting at " + DateTime.Now.Minute.ToString() + ":" + DateTime.Now.Minute.ToString() + ":" + DateTime.Now.Second.ToString() + ":" + DateTime.Now.Millisecond.ToString());
                 LogitechGSDK.LogiLedSetLightingFromBitmap(b);
+                Debug.WriteLine("b" + b[80] + "g" + b[81] + "r" + b[82] + "a" + b[83]);
+                
+                LogitechGSDK.LogiLedSetLightingForKeyWithKeyName(k.G_LOGO, b[2], b[1], b[0]);
+                //LogitechGSDK.LogiLedSetLightingForKeyWithKeyName(k.G_BADGE, cR, cG, cB);
+                // LogitechGSDK.LogiLedSetLightingForKeyWithKeyName(k.G_6, b[2], b[1], b[0]);
+                //LogitechGSDK.LogiLedSetLightingForKeyWithKeyName(k.G_2, cR, cG, cB);
+                //LogitechGSDK.LogiLedSetLightingForKeyWithKeyName(k.G_3, cR, cG, cB);
+                //LogitechGSDK.LogiLedSetLightingForKeyWithKeyName(k.G_4, cR, cG, cB);
+                //LogitechGSDK.LogiLedSetLightingForKeyWithKeyName(k.G_5, cR, cG, cB);
+                //LogitechGSDK.LogiLedSetLightingForKeyWithKeyName(k.G_6, cR, cG, cB);
+                //LogitechGSDK.LogiLedSetLightingForKeyWithKeyName(k.G_7, cR, cG, cB);
+                //LogitechGSDK.LogiLedSetLightingForKeyWithKeyName(k.G_8, cR, cG, cB);
+                //LogitechGSDK.LogiLedSetLightingForKeyWithKeyName(k.G_9, cR, cG, cB);
+                //LogitechGSDK.LogiLedSetLightingForKeyWithKeyName(k.G_BADGE, cR, cG, cB);
 
                 if (allBlack)
                 {
