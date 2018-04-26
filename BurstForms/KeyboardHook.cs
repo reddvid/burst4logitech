@@ -238,6 +238,7 @@ namespace BurstForms
                     //((Form1)Application.OpenForms[0]).pic1.Image = bmp;
                     //bmp.Save(@"C:\temp\heatmap.png");                  
                     LogitechGSDK.LogiLedSetLightingFromBitmap(b);
+                    LogitechGSDK.LogiLedSetLightingForKeyWithKeyName(k.G_LOGO, b[2], b[1], b[0]);
 
                 }
                 counter++;
@@ -274,6 +275,7 @@ namespace BurstForms
                 colour = getColour(lab1, lab2, pulse(counter / 2000.0, 10, 5));//Form1.m_fadespeed));
 
                 LogitechGSDK.LogiLedSetLighting((int)(colour.R / 255.0 * 100.0), (int)(colour.G / 255.0 * 100.0), (int)(colour.B / 255.0 * 100.0));
+                LogitechGSDK.LogiLedSetLightingForKeyWithKeyName(k.G_LOGO, (int)(colour.R / 255.0 * 100.0), (int)(colour.G / 255.0 * 100.0), (int)(colour.B / 255.0 * 100.0));
 
                 double val = 2 * Math.PI * counter / 2000 * 10;
                 if (breatheTopPause)
@@ -721,6 +723,8 @@ namespace BurstForms
                 }
                 byte[] b = Form1.getLEDGridFromBitmap(keyheatmap);
                 LogitechGSDK.LogiLedSetLightingFromBitmap(b);
+                LogitechGSDK.LogiLedSetLightingForKeyWithKeyName(k.G_LOGO, b[2], b[1], b[0]);
+
                 //keyheatmap.UnlockBits(bdata);
                 System.Threading.Thread.Sleep(50);
             }
