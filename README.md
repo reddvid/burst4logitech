@@ -9,4 +9,7 @@ Improved the UI a little.
 
 ### Preview
 
+App Main UI
+![Main](https://raw.githubusercontent.com/reddvid/BurstForLogitech/blob/master/BurstForms/Images/logiburst.png)
 
+![Gif](https://raw.githubusercontent.com/reddvid/BurstForLogitech/blob/master/BurstForms/Images/kb.gif)
